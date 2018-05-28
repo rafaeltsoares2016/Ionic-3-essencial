@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { Http, Headers, RequestOptions } from '@angular/http';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 
 @Component({
   selector: 'page-list',
@@ -14,14 +15,16 @@ export class ListPage {
     name: "", 
     price: "", 
     type: "", 
-    mark: ""
+    mark: "",
+    img: ""
   };
 
   constructor(
     public navCtrl: NavController, 
     public toastCtrl: ToastController,
     public navParams: NavParams,
-    public http: Http
+    public http: Http,
+    public camera: Camera
   ) {
     // If we navigated to this page, we will have an item available as a nav param
 
@@ -40,5 +43,21 @@ export class ListPage {
         });
         toast.present();
       });
+  }
+
+  getPhoto() {
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+
+    this.camera.getPicture(options).then((ImageData) => {
+      let base64Image = 'data:image/jpeg;base64,' + ImageData;
+      this.beer.img = base64Image;
+    }, (err) => {
+      console.log(err);
+    });
   }
 }
