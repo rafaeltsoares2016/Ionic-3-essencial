@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AuthProvider } from './../../providers/auth/auth';
 
 /**
  * Generated class for the LoginPage page.
@@ -20,7 +21,11 @@ export class LoginPage {
     password: ''
   };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    public authService: AuthProvider
+  ) {
   }
 
   ionViewDidLoad() {
@@ -28,7 +33,11 @@ export class LoginPage {
   }
 
   login() {
-    console.log('Logging... ');
+    this.authService.login(this.credential);
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
 }

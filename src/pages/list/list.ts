@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { AuthProvider } from './../../providers/auth/auth';
 
 @Component({
   selector: 'page-list',
@@ -24,11 +25,17 @@ export class ListPage {
     public toastCtrl: ToastController,
     public navParams: NavParams,
     public http: Http,
-    public camera: Camera
+    public camera: Camera,
+    public AuthService: AuthProvider
   ) {
     // If we navigated to this page, we will have an item available as a nav param
 
   }
+
+  // ionViewCanEnter(){
+  //  return this.authService.userIsLogged();
+  // }
+
   saveBeer(beer) {
     let headers = new Headers();
         headers.append('Content-Type', 'application/json');

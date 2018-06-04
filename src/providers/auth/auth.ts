@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
 import { Storage} from '@ionic/storage';
+import { ToastController } from 'ionic-angular';
 
 /*
   Generated class for the AuthProvider provider.
@@ -12,23 +12,26 @@ import { Storage} from '@ionic/storage';
 @Injectable()
 export class AuthProvider {
 
-  constructor(public http: HttpClient) {
+  private msg: string = 'É preciso logar para acessar!';
+  
+  constructor(
+    public http: Http,
+    public storage: Storage,
+    public toastCtrl: ToastController
+  ) {
     console.log('Hello AuthProvider Provider');
   }
 
-  login() {
+  login(credentials) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
     let options = new RequestOptions({ headers: headers });
-    this.http.post(this.url + '/beers', beer, options)
-      .map(res => { res.json() })
+
+    this.http.post('https://beer.symfonycasts.com.br/v1/auth/login', credentials, options)
+      .map(res => res.json())
       .subscribe(data => {
-        let toast = this.toastCtrl.create({
-          message: 'Cerveja cadastrada com sucesso!',
-          duration: 3000
-        });
-        toast.present();
+        this.storage.set('token', data.token);
       });
   }
 
@@ -37,6 +40,11 @@ export class AuthProvider {
       if(val !== undefined) {
         return val;
       } else {
+        let toast = this.toastCtrl.create({
+          message: 'É preciso logar para acessar!',
+          duration: 3000
+        });
+        toast.present();
         return false;
       }
     });
