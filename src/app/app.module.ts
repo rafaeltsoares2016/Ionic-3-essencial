@@ -15,6 +15,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Camera } from '@ionic-native/camera';
 import { AuthProvider } from '../providers/auth/auth';
+import { HttpServiceProvider } from '../providers/http-service/http-service';
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { AuthProvider } from '../providers/auth/auth';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     Camera,
-    AuthProvider
+    AuthProvider,
+    HttpServiceProvider
   ]
 })
 export class AppModule {}

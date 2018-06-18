@@ -1,3 +1,4 @@
+import { HttpServiceProvider } from './../http-service/http-service';
 import { Injectable } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
 import { Storage} from '@ionic/storage';
@@ -15,7 +16,7 @@ export class AuthProvider {
   private msg: string = 'É preciso logar para acessar!';
   
   constructor(
-    public http: Http,
+    public http: HttpServiceProvider,
     public storage: Storage,
     public toastCtrl: ToastController
   ) {
@@ -23,16 +24,19 @@ export class AuthProvider {
   }
 
   login(credentials) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
-    let options = new RequestOptions({ headers: headers });
-
-    this.http.post('https://beer.symfonycasts.com.br/v1/auth/login', credentials, options)
-      .map(res => res.json())
+    this.http.post('auth/login', credentials)
       .subscribe(data => {
         this.storage.set('token', data.token);
+      },
+    error => {
+      let msg = error.json();
+      let toast = this.toastCtrl.create({
+        message: 'Usuário ou senha incorretos!',
+        duration: 3000
       });
+      toast.present();
+    }
+    );
   }
 
   userIsLogged() {

@@ -1,3 +1,4 @@
+import { HttpServiceProvider } from './../../providers/http-service/http-service';
 import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { Http, Headers, RequestOptions } from '@angular/http';
@@ -11,7 +12,6 @@ import { AuthProvider } from './../../providers/auth/auth';
 export class ListPage {
   selectedItem: any;
   icons: string[];
-  private url:string = 'https://beer.symfonycasts.com.br/v1';
   public beer = {
     name: "", 
     price: "", 
@@ -24,7 +24,7 @@ export class ListPage {
     public navCtrl: NavController, 
     public toastCtrl: ToastController,
     public navParams: NavParams,
-    public http: Http,
+    public http: HttpServiceProvider,
     public camera: Camera,
     public AuthService: AuthProvider
   ) {
@@ -37,12 +37,7 @@ export class ListPage {
   // }
 
   saveBeer(beer) {
-    let headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-
-    let options = new RequestOptions({ headers: headers });
-    this.http.post(this.url + '/beers', beer, options)
-      .map(res => { res.json() })
+    this.http.post('beers', beer)
       .subscribe(data => {
         let toast = this.toastCtrl.create({
           message: 'Cerveja cadastrada com sucesso!',
